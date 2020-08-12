@@ -1,0 +1,80 @@
+.custom-select__wrapper {
+  position: relative;
+  user-select: none;
+}
+
+.custom-select__wrapper .custom-select__value {
+  position: relative;
+  padding: 8px 24px 8px 12px;
+  border-width: 1px;
+  border-style: solid;
+}
+.custom-select__wrapper .custom-select__value::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transition: 0.2s ease-in-out;
+  transform: translate(0, -50%);
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACfElEQVR4Xu3Yz6tIQRQH8M+LsMAGEVnJUlkiRUJJSn4k2SlRFqJEbBUWSnoLip1CSkkhyQJF+QdkwY6i2JHyq9F9m+fl3Tt35r5bd2Z9zvl+z3e+587MHTHwNTLw/hUBigMGrkAZgYEboHwEywiUERi4AmUEBm6AcgqUESgjMHAFyggM3ADlFIgZge24jIU9c88HHMS9JrxiBPiE+U1AOoz92HRjYgQISi/qsKkmUO+xpElCjABbcRfTmgB1EPsD2/CwCVaMAKH+YYw2Aeog9gCuNsWJFSDgXMCxpoCZ4s/iVEztNgKE3NvYGQOcMOcG9uF3TM02AgS8WXiC1THgCXKeYjO+x9ZqK0DAXYAXWBZLIjLvNdbgS2T+37QUAoQ6yysR5rUh0yA3nPer8K5BzoShqQQIxdfiMWa2JTVJ/lesx6sUOCkFCHz2IHyUUtcd6/UXdlT3kBT9ZyF6AueSsPu3yBFcSlk7106Fx1J4mKRcF3E0ZcGUH8HxvMI1ObzKtiQifAe7EUYg6crlgEByNp5hZUvGL7EB31rWyX4KTASwGKGBpZHk31bHXXiCZ1k5HTBGeAWeY27DDj5XN8w3DfMahXchQCC0CfcxvSa7cLXdWAlXMyUurCsBArv9uFaDZnjU7MWtGrGtQ7oUIJA9g9OTsD6J8607q1mgawECrevV83UiildwqCb3JGFTIcAMPMK6cR08qH5p/UzSWc0iUyFAoDan+qO0q7rc3MTxXGf9/7SYKgFq7k/+sCJAfo37jVAc0O/9yc+uOCC/xv1GKA7o9/7kZ1cckF/jfiMUB/R7f/KzKw7Ir3G/EYoD+r0/+dkVB+TXuN8Ig3fAH8alQUH85V+3AAAAAElFTkSuQmCC)
+    center no-repeat;
+  background-size: cover;
+}
+
+.custom-select__wrapper.focus .custom-select__value::before {
+  transform: translate(0, -50%) rotate(180deg);
+}
+
+.custom-select__wrapper .custom-select__selections {
+  position: absolute;
+  top: calc(100% + 20px);
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ced4da;
+  background-color: #fff;
+  opacity: 0.8;
+  visibility: hidden;
+  transition: 0.2s;
+  z-index: 2;
+}
+.custom-select__wrapper.focus .custom-select__selections {
+  opacity: 1;
+  top: calc(100% - 1px);
+  visibility: visible;
+}
+
+.custom-select__wrapper .custom-select__option {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.custom-select__wrapper .custom-select__option:hover {
+  background-color: #eee;
+}
+
+.custom-select__wrapper .custom-select__option.selected {
+  color: #1867c0;
+  background-color: rgba(24, 103, 192, 0.12);
+}
+
+.custom-select__wrapper .custom-select-optgroup__label {
+  padding: 8px 0 0 12px;
+  font-weight: bold;
+}
+
+.custom-select__wrapper .custom-select__optgroup .custom-select__option {
+  padding-left: 24px;
+}
+
+.custom-select__wrapper .custom-select__label-image {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

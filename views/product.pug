@@ -1,0 +1,159 @@
+extends layout/index.pug
+
+block style
+  style.
+    .table td{
+      vertical-align: middle
+    }
+    .table-title{
+      width: 180px;
+    }
+    .table-image{
+      width: 100px;
+    }
+    .table-code{
+      width: 120px;
+    }
+    .table-category-thumbnail{
+      width: 30px;
+      margin-right: 4px;
+    }
+    .table-gallery-image{
+      width: 40px;
+      margin-right: 4px;
+    }
+    .table-square-color{
+      width: 20px;
+      height: 20px;
+      margin-right: 2px;
+      -webkit-box-shadow: -1px 2px 5px 0px rgba(0,0,0,0.75);
+      -moz-box-shadow: -1px 2px 5px 0px rgba(0,0,0,0.75);
+      box-shadow: -1px 2px 5px 0px rgba(0,0,0,0.75);
+    }
+    .table-square-size{
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      margin-right: 2px;
+      text-size: 12px;
+      text-align: center;
+      border: 1px solid #ccc;
+    }
+    .scroll-horizontal{
+      width: 100%;
+      overflow: auto;
+    }
+block content
+  .px-3.py-4
+    .row
+      .col-sm-3.col-12.mb-5
+        .card.w-100
+          .card-body
+            form(action='#' method='method')
+              h3.text-center.text-primary.text-uppercase.mb-4 Products
+              .form-group
+                label(for='title') Title
+                input#title.form-control(type='text' v-model='tempProduct.title' name='title' placeholder='Title' autofocus=true)
+              .form-group
+                label(for='product_code') Product Code
+                input#product_code.form-control(type='text' v-model='tempProduct.product_code' name='product_code' placeholder='Product code...' autofocus=true)
+              .form-group
+                label(for='thumbnail') Thumbnail
+                input#thumbnail.form-control(type='text' v-model='tempProduct.thumbnail' name='thumbnail' placeholder='Thumbnail' autofocus=true)
+              .form-group
+                label(for='galleries') Galleries
+                textarea#galleries.form-control(rows='6' v-model='tempProduct.galleries' name='galleries' placeholder='Galleries...' autofocus=true)
+              .d-flex.row
+                .form-group.col-6
+                  label(for='price') Price
+                  input#price.form-control(type='number' name='price' v-model='tempProduct.price')
+                .form-group.col-6
+                  label(for='discount') Discount
+                  input#discount.form-control(type='number' name='price' v-model='tempProduct.discount')
+              .form-group
+                label(for='colors') Colors
+                input#colors.form-control(v-model='tempProduct.colors' name='colors' placeholder='Colors...' autofocus=true)
+              .form-group
+                label(for='sizes') Sizes
+                input#sizes.form-control(v-model='tempProduct.sizes' name='sizes' placeholder='Sizes...' autofocus=true)
+              .form-group
+                label(for='category') Categories
+                select#category.custom-select.form-control(multiple label-with-image placeholder='Categories...' name='category')
+                  option(value='' v-if='categories === null') Loading...
+                  template(v-if='categories !== null')
+                    option(:value='category.id' v-bind:data-image='category.thumbnail' v-for='category in categories.docs' :key='category._id') {{category.title}}
+              .form-group
+                label(for='vendor') Vendors
+                select#vendor.custom-select.form-control(label-with-image placeholder='Vendors...' name='vendor')
+                  option(value='' v-if='vendors === null') Loading...
+                  template(v-if='vendors !== null')
+                    option(:value='vendor.id' v-bind:data-image='vendor.logo' v-for='vendor in vendors.docs' :key='vendor._id') {{vendor.title}}
+              .form-group
+                label(for='status') Status
+                select#status.custom-select.form-control(placeholder='Product status...' name='status')
+                  option(value='' v-if='productStatus === null') Loading...
+                  template(v-if='productStatus !== null')
+                    option(:value='status.id' v-for='status in productStatus.docs' :key='status._id') {{status.title}}
+              .form-group
+                label(for='description') Description
+                textarea#description.form-control(rows='4' v-model='tempProduct.description' name='description' placeholder='Description')
+              .form-group
+                label(for='more_information') More Information
+                textarea#more_information.form-control(v-model='tempProduct.more_information' name='more_information' placeholder='Type something')
+
+              button.btn.btn-primary.mr-2(type='button' @click='saveProduct' ) {{ type === 'add' ? 'Add' : 'Save'}}
+              button.btn.btn-secondary(ref='cancel' type='button' @click='resetForm' v-if='type !== "add"') Cancel
+
+      .col-sm-9.col-12.mb-5
+        .scroll-horizontal
+          table.table.table-hover
+            thead.thead-dark
+              tr
+                th(scope='col') #
+                th(scope='col') Title
+                th(scope='col') Price
+                th(scope='col') Category
+                th(scope='col') Discount
+                th.text-center(scope='col') Thumbnail
+                th.table-code(scope='col') Code
+                th(scope='col') Vendor
+                th(scope='col') Galleries
+                th(scope='col') Colors
+                th(scope='col') Sizes
+                th(scope='col') Status
+                th(scope='col') Action
+            tbody
+              template(v-if='products !== null')
+                tr(v-for='(product, index) in products.docs' :key='product._id' @click='editProduct(product)')
+                  th(scope='row') {{index + 1}}
+                  td.table-title {{product.title}}
+                  td ${{product.price}}
+                  td
+                    .d-flex
+                      img.table-category-thumbnail(:src='category.thumbnail' v-for='category in product.category_id' :key='category.id')
+                  td.text-center {{product.discount}}%
+                  td
+                    img.table-image(:src='product.thumbnail')
+                  td.table-code {{product.product_code}}
+                  td {{product.vendor_id.title}}
+                   td
+                    .d-flex
+                      img.table-gallery-image(:src='gallery_image' v-for='gallery_image in product.galleries' :key="'gallery' + gallery_image")
+                  td
+                    .d-flex
+                      .table-square-color(v-for='(color, color_index) in product.colors' :key="'color-' + color_index" :style='{background: color}')
+                  td
+                    .d-flex
+                      .table-square-size(v-for='(size, size_index) in product.sizes' :key="'size-' + size_index") {{size}}
+                  td {{product.status.title}}
+
+              tr(v-if='products === null')
+                td.pt-4(colspan='13')
+                  .progress
+                    .progress-bar.progress-bar-striped.progress-bar-animated.bg-dark(role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 100%')
+
+
+block scripts
+  script(src='js/product.js')
+  link(href='https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css' rel='stylesheet')
+  script(src='https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js')
