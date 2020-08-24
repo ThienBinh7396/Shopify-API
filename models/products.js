@@ -34,6 +34,10 @@ const ProductSchema = new Schema(
       type: [String],
       default: [],
     },
+    sell: {
+      type: Number,
+      default: 0
+    },
     status: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "product-status",

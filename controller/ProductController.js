@@ -33,14 +33,10 @@ module.exports = {
   getTopSeller: async (req, res) => {
     try {
       const products = await Products.find(
-        {
-          discount: {
-            $gte: 0,
-          },
-        },
+        {},
         null,
         {
-          sort: { discount: "desc" },
+          sort: { sell: "desc" },
           limit: 5
         }
       ).populate(["vendor_id", "category_id", "status"]);
